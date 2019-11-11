@@ -4,6 +4,9 @@
   "description": "ISMS module for NestJS",
   "author": "Deojeff Lai <d30jeff@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "url": "git@github.com:d30jeff/nestjs-isms.git"
+  },
   "main": "dist/index.js",
   "scripts": {
     "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
