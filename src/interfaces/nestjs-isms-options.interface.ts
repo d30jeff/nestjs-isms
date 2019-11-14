@@ -7,8 +7,8 @@ export enum NestjsIsmsType {
 export interface NestjsIsmsOptions {
   username: string;
   password: string;
-  recipientNumber: string;
-  message: string;
+  recipientNumber?: string;
+  message?: string;
   type?: NestjsIsmsType;
   acceptTerm: boolean;
   senderId?: string;
