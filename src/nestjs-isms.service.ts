@@ -1,10 +1,15 @@
-import { ISMS_ENDPOINTS, MAX_MESSAGE_LENGTH } from './constants';
 // tslint:disable: variable-name
 import { HttpService, Inject, Injectable, Logger } from '@nestjs/common';
 import { from, of } from 'rxjs';
 import { catchError, concatMap, filter, map, take } from 'rxjs/operators';
-import { NESTJS_ISMS_OPTIONS } from './constants';
+import {
+  ISMS_ENDPOINTS,
+  MAX_MESSAGE_LENGTH,
+  NESTJS_ISMS_OPTIONS,
+  SERVER_RESPONSE_CODES,
+} from './constants';
 import { NestjsIsmsOptions, NestjsIsmsType } from './interfaces';
+import { ResponseCode } from './response-codes/response-codes.interface';
 
 /**
  * Sample interface for NestjsIsmsService
@@ -57,7 +62,7 @@ export class NestjsIsmsService implements INestjsIsmsService {
       this.logger.error(message);
     }
   }
-  async sendSms(params: SendSmsParams): Promise<any> {
+  async sendSms(params: SendSmsParams): Promise<ResponseCode> {
     const { username, password, type } = this.options;
     let { recipients } = params;
     const { message, type: paramType } = params;
@@ -89,7 +94,7 @@ export class NestjsIsmsService implements INestjsIsmsService {
                 msg: message,
                 dstno: recipients,
                 type: messageType,
-              }
+              },
             })
             .pipe(
               catchError(error => {
@@ -99,7 +104,7 @@ export class NestjsIsmsService implements INestjsIsmsService {
             );
         }),
         // Get the response body
-        map(response => response.data),
+        map(response => SERVER_RESPONSE_CODES[response.data]),
         // Exclude errored response
         filter(response => Boolean(response)),
         // Only interested in the first succesful response
